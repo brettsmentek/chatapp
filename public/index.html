@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Chat</title>
+  <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/css/materialize.min.css">
+  <link rel="stylesheet" href="main.css">
+</head>
+<body>
+  <ul class="pages">
+    <li class="chat page">
+      <div class="chatArea">
+        <ul class="messages"></ul>
+      </div>
+      <div class="input-field inputMessage z-depth-1">
+        <i class="material-icons prefix">chat</i>
+        <input id="inputMessage" type="text" class="validate">
+        <label for="inputMessage">Your message...</label>
+      </div>
+    <li class="login page">
+      <div class="form">
+        <h3 class="title">Username:</h3>
+        <input class="usernameInput" type="text" maxlength="100" />
+        <div>
+          <a class="waves-effect waves-light btn" id="joinbuttonexisting" style="margin-bottom: 10px;"><i class="material-icons right">chat</i>Join as existing</a>
+          <a class="waves-effect waves-light btn" id="joinbuttonnew" style="margin-bottom: 10px;"><i class="material-icons right">add</i>Join as new</a>
+        </div>
+      </div>
+    </li>
+  </ul>
+
+  <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/js/materialize.min.js"></script>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="/chat.js"></script>
+</body>
+</html>
