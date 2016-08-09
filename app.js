@@ -134,32 +134,34 @@ io.on('connection', function (socket) {
           });
           console.log('loading previous chats for user');
           var lastLogoffStr = "SELECT lastlogoff FROM users WHERE username = '" + socket.username + "';";
+          console.log(lastLogoffStr);
           var lastLogoff;
+          var queryChatsStr;
           db.get(lastLogoffStr, function(err, row) {
             if (err) {
               console.error('error looking up last logoff', err);
               return;
             } else {
-              lastLogoff = row;
+              lastLogoff = row.lastlogoff;
+              if (lastLogoff === undefined) {
+                queryChatsStr = "SELECT username, content FROM messages WHERE posted < " + Date.now() + " LIMIT 100";
+              } else {
+                queryChatsStr = "SELECT username, content FROM messages WHERE posted > " + lastLogoff + " LIMIT 100";
+              }
             }
-          });
-          var queryChatsStr;
-          if (lastLogoff === undefined) {
-            queryChatsStr = "SELECT username, content FROM messages WHERE posted < " + Date.now() + " LIMIT 100";
-          } else {
-            queryChatsStr = "SELECT username, content FROM messages WHERE posted > " + lastLogoff + " LIMIT 100";
-          }
-          console.log(queryChatsStr);
-          db.all(queryChatsStr, function(err, all) {
-            if (err) {
-              console.error('error looking up previous chats', err);
-              return;
-            } else {
-              all.forEach(function(chat) {
-                chat.content = validator.unescape(chat.content);
-              });
-              socket.emit('loadchat', all);
-            }
+            console.log('lastLogoff', lastLogoff);
+            console.log(queryChatsStr);
+            db.all(queryChatsStr, function(err, all) {
+              if (err) {
+                console.error('error looking up previous chats', err);
+                return;
+              } else {
+                all.forEach(function(chat) {
+                  chat.content = validator.unescape(chat.content);
+                });
+                socket.emit('loadchat', all);
+              }
+            });
           });
         }
       });
